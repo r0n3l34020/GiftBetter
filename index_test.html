@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <!--This is to connect the .html file to the .css file for the dark theme-->
     <head>
         <title>GiftBetter</title>
         <link rel ="stylesheet" href ="style_test.css">
@@ -7,7 +8,31 @@
 <body>
     <h1>Welcome to GiftBetter</h1>
     <p>GiftBetter is the optimal solution to gift-picking</p>
-    <button>Generate Gift Ideas!</button>
-    
+    <label for="userName">What is the name of the birthday boy/girl?</label>
+    <input type="text" id="userName">
+    <br>
+    <br>
+    <label for="birthdayCountdown">How many days till the birthday?</label>
+    <input type="number" id="birthdayCountdown">
+    <br>
+    <br>
+    <button id="generateButton">Generate Gift Ideas!</button>
+<script>
+    const daysBeforeReminder = 14;
+    function calculateAlertDay(daysUntilBirthday) {
+        return daysUntilBirthday - daysBeforeReminder;
+    }
+    document.getElementById("generateButton").addEventListener("click", function() {
+        const daysUntilBirthday = Number(document.getElementById("birthdayCountdown").value);
+        const calculateDay = calculateAlertDay(daysUntilBirthday);
+        if (calculateDay <= 14) {
+            alert("Time to get a gift!");
+        }
+
+        else {
+            alert("You still have time!")
+        }
+    });
+</script>
 </body>
 </html>
