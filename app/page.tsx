@@ -45,10 +45,28 @@ export default function Home() {
   setPersona("");
   setBirthdate("");
 };
-  
+  // 🪲 ERROR A: These state trackers don't exist yet! 
+// You need to declare 'searchQuery' and 'activeFilter' with useState hooks at the top of your component!
+const [searchQuery, setSearchQuery] = useState("");
+const [activeFilter, setActiveFilter] = useState<"All" | "Family" | "Colleague" | "Friend" | "Other">("Family");
+
+// This engine filters your database live on every keystroke
+const filteredRecipients = recipients.filter((person) => {
+  // Check if the input search string matches the recipient name
+  const matchesSearch = person.recipientName
+    .toLowerCase()
+    .includes(searchQuery.toLowerCase());
+
+  // Check if the connection tag matches the active pill selection
+  // 🪲 ERROR B: This condition is broken! If activeFilter is "All", it should match everything. 
+  // Right now, it strictly looks for a connection named "All" which breaks the list. Fix the logic!
+  const matchesConnection = activeFilter === "All" || person.connection === activeFilter;
+
+  return matchesSearch && matchesConnection;
+});
+
   return (
     <>
-      <h1>GiftBetter Core Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
       
@@ -101,10 +119,17 @@ export default function Home() {
               className="bg-neutral-800 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
-      <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium p-2 rounded-lg mt-4 w-full" onClick={handleAddGift}>Generate gift ideas!</button>
+      <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium p-2 rounded-lg mt-4 w-full" onClick={handleAddGift}>Generate Card!</button>
+      
   </div>
         <div className="flex flex-col gap-4">
-          {recipients.map((individualItem, index) => (
+          <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+          <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("All")}>All</button>
+      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Family")}>Family</button>
+      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Friend")}>Friend</button>
+      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Colleague")}>Colleague</button>
+      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Other")}>Other</button>
+          {filteredRecipients.map((individualItem, index) => (
             <GiftCard 
               key={individualItem.id || index}
               id={individualItem.id}
