@@ -17,9 +17,7 @@ export default function Home() {
   const [recipientName, setRecipientName] = useState("");
   const [connection, setConnection] = useState<"Family" | "Friend" | "Colleague" | "Other">("Family");
   const [birthdate, setBirthdate] = useState("");
-  const [recipients, setRecipients] = useState<Recipient[]>([
-    { id: "", userPersona: "", recipientName: "", connection: "Family", birthdate: "", interests: []},
-  ]);
+  const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [persona, setPersona] = useState("");
   const handleAddGift = () => {
   if (!recipientName.trim()) return; 
@@ -45,13 +43,17 @@ export default function Home() {
   setPersona("");
   setBirthdate("");
 };
+
 const [searchQuery, setSearchQuery] = useState("");
 const [activeFilter, setActiveFilter] = useState<"All" | "Family" | "Colleague" | "Friend" | "Other">("Family");
 
+
 const filteredRecipients = recipients.filter((person) => {
+
   const matchesSearch = person.recipientName
     .toLowerCase()
     .includes(searchQuery.toLowerCase());
+
 
   const matchesConnection = activeFilter === "All" || person.connection === activeFilter;
 
@@ -59,7 +61,7 @@ const filteredRecipients = recipients.filter((person) => {
 });
 
   return (
-    <>
+    <div className="px-4 md: px-8 py-6 w-full">
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
       
@@ -116,12 +118,14 @@ const filteredRecipients = recipients.filter((person) => {
       
   </div>
         <div className="flex flex-col gap-4">
-          <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-          <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("All")}>All</button>
-      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Family")}>Family</button>
-      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Friend")}>Friend</button>
-      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Colleague")}>Colleague</button>
-      <button className="bg-blue-600 hover:bg-grey-700 text-black font-italic p-2 rounded-lg mt-4 w-full" onClick={() => setActiveFilter("Other")}>Other</button>
+          <div className="flex flex-row gap-2 mb-6 items-center justify-center">
+            <input type="text" value={searchQuery} placeholder="Type a name here..." className="bg-neutral-800 text-white p-2 rounded-lg text-xs w-full max-w-xs" onChange={(e) => setSearchQuery(e.target.value)} />
+            <button className="bg-neutral-800 text-neutral-400 hover:bg-blue-600 hover:text-white transition-colors text-xs font-regular rounded-full px-3 py-1" onClick={() => setActiveFilter("All")}>All</button>
+            <button className="bg-neutral-800 text-neutral-400 hover:bg-blue-600 hover:text-white transition-colors text-xs font-regular rounded-full px-3 py-1" onClick={() => setActiveFilter("Family")}>Family</button>
+            <button className="bg-neutral-800 text-neutral-400 hover:bg-blue-600 hover:text-white transition-colors text-xs font-regular rounded-full px-3 py-1" onClick={() => setActiveFilter("Friend")}>Friend</button>
+            <button className="bg-neutral-800 text-neutral-400 hover:bg-blue-600 hover:text-white transition-colors text-xs font-regular rounded-full px-3 py-1" onClick={() => setActiveFilter("Colleague")}>Colleague</button>
+            <button className="bg-neutral-800 text-neutral-400 hover:bg-blue-600 hover:text-white transition-colors text-xs font-regular rounded-full px-3 py-1" onClick={() => setActiveFilter("Other")}>Other</button>
+          </div>
           {filteredRecipients.map((individualItem, index) => (
             <GiftCard 
               key={individualItem.id || index}
@@ -137,7 +141,7 @@ const filteredRecipients = recipients.filter((person) => {
         </div>
 
         </div>
-      
-    </>
+      </div>
   );
 }
+
