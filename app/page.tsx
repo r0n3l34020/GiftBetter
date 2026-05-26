@@ -22,11 +22,29 @@ export default function Home() {
   ]);
   const [persona, setPersona] = useState("");
   const handleAddGift = () => {
-    const processedTags = rawInterests
-      .split(" ")
-      .filter(tag => tag.startsWith("#"))
-      .map(tag => tag.replace("#", "").toLowerCase().trim());
-  }
+  if (!recipientName.trim()) return; 
+
+  const processedTags = rawInterests
+    .split(" ")
+    .filter(tag => tag.startsWith("#"))
+    .map(tag => tag.replace("#", "").toLowerCase().trim());
+
+  const newRecipient: Recipient = {
+    id: Date.now().toString(),
+    recipientName: recipientName,
+    connection: connection,
+    userPersona: persona,
+    birthdate: birthdate,
+    interests: processedTags, 
+  };
+
+  setRecipients([...recipients, newRecipient]); 
+
+  setRecipientName("");
+  setrawInterests("");
+  setPersona("");
+  setBirthdate("");
+};
   
   return (
     <>
@@ -83,13 +101,12 @@ export default function Home() {
               className="bg-neutral-800 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </div>
-    </div>
       <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium p-2 rounded-lg mt-4 w-full" onClick={handleAddGift}>Generate gift ideas!</button>
   </div>
-        <div>
+        <div className="flex flex-col gap-4">
           {recipients.map((individualItem, index) => (
             <GiftCard 
-              key={index}
+              key={individualItem.id || index}
               id={individualItem.id}
               userPersona={individualItem.userPersona}
               recipientName={individualItem.recipientName}
@@ -99,6 +116,8 @@ export default function Home() {
 
             />
           ))}
+        </div>
+
         </div>
       
     </>
