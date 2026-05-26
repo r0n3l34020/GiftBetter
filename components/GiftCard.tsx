@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function GiftCard({ recipientName, connection, userPersona, birthdate, interests }: any) {
+export default function GiftCard({ id, recipientName, connection, userPersona, birthdate, interests }: any) {
   const [isOpen, setIsOpen] = useState(false); 
+  const router = useRouter();
 
   return (
     <div className="bg-neutral-900 p-4 rounded-xl border border-neutral-800">
@@ -13,8 +15,11 @@ export default function GiftCard({ recipientName, connection, userPersona, birth
           </span>
         </div>
 
-        <button className="text-sm text-blue-400 hover:underline" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? "Hide Details" : "View Details"}
+        <button 
+            onClick={() => router.push(`/recipient/${id}`)}
+            className="text-xs text-purple-400 hover:text-purple-300 transition-colors underline font-medium"
+        >
+            View Details
         </button>
       </div>
 
@@ -22,7 +27,7 @@ export default function GiftCard({ recipientName, connection, userPersona, birth
       
       {isOpen && (
         <div className="mt-4 pt-4 border-t border-neutral-800 text-sm text-neutral-400 space-y-2">
-          {userPersona && <p><strong className="text-neutral-200">Notes:</strong> {userPersona}</p>}
+
           {birthdate && <p><strong className="text-neutral-200">Birthdate:</strong> {birthdate}</p>}
           
           <div className="flex flex-wrap gap-1 mt-2">
