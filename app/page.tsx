@@ -45,21 +45,14 @@ export default function Home() {
   setPersona("");
   setBirthdate("");
 };
-  // 🪲 ERROR A: These state trackers don't exist yet! 
-// You need to declare 'searchQuery' and 'activeFilter' with useState hooks at the top of your component!
 const [searchQuery, setSearchQuery] = useState("");
 const [activeFilter, setActiveFilter] = useState<"All" | "Family" | "Colleague" | "Friend" | "Other">("Family");
 
-// This engine filters your database live on every keystroke
 const filteredRecipients = recipients.filter((person) => {
-  // Check if the input search string matches the recipient name
   const matchesSearch = person.recipientName
     .toLowerCase()
     .includes(searchQuery.toLowerCase());
 
-  // Check if the connection tag matches the active pill selection
-  // 🪲 ERROR B: This condition is broken! If activeFilter is "All", it should match everything. 
-  // Right now, it strictly looks for a connection named "All" which breaks the list. Fix the logic!
   const matchesConnection = activeFilter === "All" || person.connection === activeFilter;
 
   return matchesSearch && matchesConnection;
